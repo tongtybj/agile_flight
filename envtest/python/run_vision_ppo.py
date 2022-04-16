@@ -6,6 +6,8 @@ import os
 
 import numpy as np
 import torch
+
+import time
 from flightgym import VisionEnv_v1
 from ruamel.yaml import YAML, RoundTripDumper, dump
 from stable_baselines3.common.utils import get_device
@@ -34,6 +36,7 @@ def parser():
 
 
 def main():
+    start_time = time.time()
     args = parser().parse_args()
 
     # load configurations
@@ -97,6 +100,8 @@ def main():
 
         #
         model.learn(total_timesteps=int(5 * 1e7), log_interval=(10, 50))
+        finish_time = time.time()
+        print("learning time is "+ str(finish_time-start_time))
     else:
         os.system(os.environ["FLIGHTMARE_PATH"] + "/flightrender/RPG_Flightmare.x86_64 &")
         #
@@ -115,6 +120,7 @@ def main():
         # 
         eval_env.load_rms(env_rms)
         test_policy(eval_env, policy, render=args.render)
+
 
 
 if __name__ == "__main__":
