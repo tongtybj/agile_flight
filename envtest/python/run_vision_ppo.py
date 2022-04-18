@@ -99,7 +99,7 @@ def main():
         )
 
         #
-        model.learn(total_timesteps=int(5 * 1e7), log_interval=(10, 50))
+        model.learn(total_timesteps=int(15 * 1e7), log_interval=(10, 50))
         finish_time = time.time()
         print("learning time is "+ str(finish_time-start_time))
     else:
