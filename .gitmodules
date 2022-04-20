@@ -1,6 +1,7 @@
 [submodule "flightmare"]
 	path = flightmare
 	url = git@github.com:HarukiKozukapenguin/flightmare.git
+        branch = ddc_rl
 [submodule "catkin_simple"]
 	path = catkin_simple
 	url = https://github.com/catkin/catkin_simple
