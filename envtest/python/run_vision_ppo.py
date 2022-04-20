@@ -10,6 +10,7 @@ import torch
 import time
 from flightgym import VisionEnv_v1
 from ruamel.yaml import YAML, RoundTripDumper, dump
+# from ruamel import yaml
 from stable_baselines3.common.utils import get_device
 from stable_baselines3.ppo.policies import MlpPolicy
 
@@ -32,6 +33,9 @@ def parser():
     parser.add_argument("--render", type=int, default=0, help="Render with Unity")
     parser.add_argument("--trial", type=int, default=1, help="PPO trial number")
     parser.add_argument("--iter", type=int, default=100, help="PPO iter number")
+    parser.add_argument("--move_coeff", type=float, help="move_coeff of rewards")
+    parser.add_argument("--collision_coeff", type=float, help="collision_coeff of rewards")
+    parser.add_argument("--survive_rew", type=float, help="collision_coeff of rewards")
     return parser
 
 
@@ -48,6 +52,15 @@ def main():
 
     if not args.train:
         cfg["simulation"]["num_envs"] = 1 
+
+    # print(args.move_coeff)
+    if args.move_coeff != None:
+        cfg["rewards"]["move_coeff"] = args.move_coeff
+    if args.collision_coeff != None:
+        cfg["rewards"]["collision_coeff"] = args.collision_coeff
+    if args.survive_rew != None:
+        cfg["rewards"]["survive_rew"] = args.survive_rew
+    # print(cfg["rewards"]["move_coeff"])
 
     # create training environment
     train_env = VisionEnv_v1(dump(cfg, Dumper=RoundTripDumper), False)
@@ -71,8 +84,6 @@ def main():
     rsg_root = os.path.dirname(os.path.abspath(__file__))
     log_dir = rsg_root + "/saved"
     os.makedirs(log_dir, exist_ok=True)
-
-    #
     if args.train:
         model = PPO(
             tensorboard_log=log_dir,
@@ -97,9 +108,17 @@ def main():
             env_cfg=cfg,
             verbose=1,
         )
-
-        #
-        model.learn(total_timesteps=int(15 * 1e7), log_interval=(10, 50))
+        # print(model.logger)
+        model.learn(total_timesteps=int(5.00E+07), log_interval=(10, 50))
+        cfg_dir = model.logger.get_dir()+"/config_new.yaml"
+        with open(cfg_dir, "w") as outfile:
+            dump({
+        "rewards": {
+            "move_coeff": args.move_coeff,
+            "collision_coeff": args.collision_coeff,
+            "survive_rew": args.survive_rew,
+        }
+    }, outfile, default_flow_style=False)
         finish_time = time.time()
         print("learning time is "+ str(finish_time-start_time))
     else:
