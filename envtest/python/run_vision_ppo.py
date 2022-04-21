@@ -35,12 +35,14 @@ def parser():
     parser.add_argument("--iter", type=int, default=100, help="PPO iter number")
     parser.add_argument("--move_coeff", type=float, help="move_coeff of rewards")
     parser.add_argument("--collision_coeff", type=float, help="collision_coeff of rewards")
+    parser.add_argument("--collision_exp_coeff", type=float, help="collision_exp_coeff of rewards")
     parser.add_argument("--survive_rew", type=float, help="collision_coeff of rewards")
+    parser.add_argument("--check", type=bool, default = False, help="check of simulation, not make long csv")
     return parser
 
 
 def main():
-    start_time = time.time()
+    # start_time = time.time()
     args = parser().parse_args()
 
     # load configurations
@@ -58,6 +60,8 @@ def main():
         cfg["rewards"]["move_coeff"] = args.move_coeff
     if args.collision_coeff != None:
         cfg["rewards"]["collision_coeff"] = args.collision_coeff
+    if args.collision_exp_coeff != None:
+        cfg["rewards"]["collision_exp_coeff"] = args.collision_exp_coeff
     if args.survive_rew != None:
         cfg["rewards"]["survive_rew"] = args.survive_rew
     # print(cfg["rewards"]["move_coeff"])
@@ -107,20 +111,22 @@ def main():
             use_sde=False,  # don't use (gSDE), doesn't work
             env_cfg=cfg,
             verbose=1,
+            check = args.check
         )
         # print(model.logger)
-        model.learn(total_timesteps=int(5.00E+07), log_interval=(10, 50))
+        model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
         cfg_dir = model.logger.get_dir()+"/config_new.yaml"
         with open(cfg_dir, "w") as outfile:
             dump({
         "rewards": {
             "move_coeff": args.move_coeff,
             "collision_coeff": args.collision_coeff,
+            "collision_exp_coeff": args.collision_exp_coeff,
             "survive_rew": args.survive_rew,
         }
     }, outfile, default_flow_style=False)
-        finish_time = time.time()
-        print("learning time is "+ str(finish_time-start_time))
+        # finish_time = time.time()
+        # print("learning time is "+ str(finish_time-start_time))
     else:
         os.system(os.environ["FLIGHTMARE_PATH"] + "/flightrender/RPG_Flightmare.x86_64 &")
         #
