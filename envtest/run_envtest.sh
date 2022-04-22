@@ -11,13 +11,13 @@
 # done
 # done
 start_time=`date +%s`
-for move_coeff in 0.8 1.0 1.5 3
+for move_coeff in 1.5 3
 do 
-for collision_coeff in -0.05 -0.1
+for collision_coeff in -0.01 -0.05
 do
-for survive_rew in 0.1
+for survive_rew in 0.1 0 -0.1
 do
-for collision_exp_coeff in 0.1 0.3 1
+for collision_exp_coeff in 1 2
 do
 python3 -m python.run_vision_ppo --render 0 --train 1 \
 --move_coeff $move_coeff --collision_coeff $collision_coeff \

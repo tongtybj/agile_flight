@@ -42,7 +42,7 @@ def parser():
 
 
 def main():
-    # start_time = time.time()
+    start_time = time.time()
     args = parser().parse_args()
 
     # load configurations
@@ -114,7 +114,7 @@ def main():
             check = args.check
         )
         # print(model.logger)
-        model.learn(total_timesteps=int(25E5), log_interval=(10, 50))
+        model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
         cfg_dir = model.logger.get_dir()+"/config_new.yaml"
         with open(cfg_dir, "w") as outfile:
             dump({
@@ -125,8 +125,8 @@ def main():
             "survive_rew": args.survive_rew,
         }
     }, outfile, default_flow_style=False)
-        # finish_time = time.time()
-        # print("learning time is "+ str(finish_time-start_time))
+        finish_time = time.time()
+        print("learning time is "+ str(finish_time-start_time))
     else:
         os.system(os.environ["FLIGHTMARE_PATH"] + "/flightrender/RPG_Flightmare.x86_64 &")
         #
