@@ -114,7 +114,7 @@ def main():
             check = args.check
         )
         # print(model.logger)
-        model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
+        model.learn(total_timesteps=int(25E5), log_interval=(10, 50))
         cfg_dir = model.logger.get_dir()+"/config_new.yaml"
         with open(cfg_dir, "w") as outfile:
             dump({
