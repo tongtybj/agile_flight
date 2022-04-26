@@ -77,6 +77,8 @@ def main():
         cfg["unity"]["render"] = "yes"
     
     # create evaluation environment
+    cfg["environment"]["level"] = ["hard"] #evaluate in the hard environment
+    #same level regardless of argument of simulator.
     old_num_envs = cfg["simulation"]["num_envs"]
     cfg["simulation"]["num_envs"] = 1
     eval_env = wrapper.FlightEnvVec(
@@ -106,7 +108,7 @@ def main():
             ent_coef=0.0,
             vf_coef=0.5,
             max_grad_norm=0.5,
-            batch_size=25000,
+            batch_size=200000,
             clip_range=0.2,
             use_sde=False,  # don't use (gSDE), doesn't work
             env_cfg=cfg,
