@@ -11,7 +11,7 @@
 # done
 # done
 start_time=`date +%s`
-for move_coeff in 1.5 3
+for move_coeff in 0 0.5 
 do 
 for collision_coeff in -0.01 -0.05
 do

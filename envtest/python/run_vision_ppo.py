@@ -77,6 +77,7 @@ def main():
         cfg["unity"]["render"] = "yes"
     
     # create evaluation environment
+    old_envs_level = cfg["environment"]["level"]
     cfg["environment"]["level"] = ["hard"] #evaluate in the hard environment
     #same level regardless of argument of simulator.
     old_num_envs = cfg["simulation"]["num_envs"]
@@ -84,6 +85,7 @@ def main():
     eval_env = wrapper.FlightEnvVec(
         VisionEnv_v1(dump(cfg, Dumper=RoundTripDumper), False)
     )
+    cfg["environment"]["level"] = old_envs_level
     cfg["simulation"]["num_envs"] = old_num_envs
 
     # save the configuration and other files
@@ -91,32 +93,35 @@ def main():
     log_dir = rsg_root + "/saved"
     os.makedirs(log_dir, exist_ok=True)
     if args.train:
-        model = PPO(
-            tensorboard_log=log_dir,
-            policy="MlpPolicy",
-            policy_kwargs=dict(
-                activation_fn=torch.nn.ReLU,
-                net_arch=[dict(pi=[256, 256], vf=[512, 512])],
-                log_std_init=-0.5,
-            ),
-            env=train_env,
-            eval_env=eval_env,
-            use_tanh_act=True,
-            gae_lambda=0.95,
-            gamma=0.99,
-            n_steps=250,
-            ent_coef=0.0,
-            vf_coef=0.5,
-            max_grad_norm=0.5,
-            batch_size=200000,
-            clip_range=0.2,
-            use_sde=False,  # don't use (gSDE), doesn't work
-            env_cfg=cfg,
-            verbose=1,
-            check = args.check
-        )
-        # print(model.logger)
-        model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
+        level_list = cfg["environment"]["level"]
+        for level in level_list:
+            cfg["environment"]["level"] = [level]
+            model = PPO(
+                tensorboard_log=log_dir,
+                policy="MlpPolicy",
+                policy_kwargs=dict(
+                    activation_fn=torch.nn.ReLU,
+                    net_arch=[dict(pi=[256, 256], vf=[512, 512])],
+                    log_std_init=-0.5,
+                ),
+                env=train_env,
+                eval_env=eval_env,
+                use_tanh_act=True,
+                gae_lambda=0.95,
+                gamma=0.99,
+                n_steps=250,
+                ent_coef=0.0,
+                vf_coef=0.5,
+                max_grad_norm=0.5,
+                batch_size=10000,
+                clip_range=0.2,
+                use_sde=False,  # don't use (gSDE), doesn't work
+                env_cfg=cfg,
+                verbose=1,
+                check = args.check
+            )
+            # print(model.logger)
+            model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
         cfg_dir = model.logger.get_dir()+"/config_new.yaml"
         with open(cfg_dir, "w") as outfile:
             dump({
