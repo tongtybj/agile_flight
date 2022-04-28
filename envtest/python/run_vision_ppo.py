@@ -113,7 +113,7 @@ def main():
                 ent_coef=0.0,
                 vf_coef=0.5,
                 max_grad_norm=0.5,
-                batch_size=200000,
+                batch_size=10000,
                 clip_range=0.2,
                 use_sde=False,  # don't use (gSDE), doesn't work
                 env_cfg=cfg,
