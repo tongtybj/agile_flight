@@ -104,6 +104,7 @@ def main():
                     net_arch=[dict(pi=[256, 256], vf=[512, 512])],
                     log_std_init=-0.5,
                 ),
+                level_list = level_list, #change envs depending on the envlist
                 env=train_env,
                 eval_env=eval_env,
                 use_tanh_act=True,
@@ -121,7 +122,7 @@ def main():
                 check = args.check
             )
             # print(model.logger)
-            model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
+            model.learn(total_timesteps=int(5E5), log_interval=(10, 50))
         cfg_dir = model.logger.get_dir()+"/config_new.yaml"
         with open(cfg_dir, "w") as outfile:
             dump({
