@@ -114,7 +114,7 @@ def main():
         policy.to(device)
         # 
         eval_env.load_rms(env_rms)
-        test_policy(eval_env, policy, render=args.render)
+        test_policy(eval_env, policy, render=args.render, max_ep_length=100000)
 
 
 if __name__ == "__main__":
