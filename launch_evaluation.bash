@@ -44,12 +44,12 @@ do
   python3 evaluation_node.py &
   PY_PID="$!"
 
-  python3 run_competition.py &
+  python3 run_competition.py --ppo_path /root/noetic/icra22_competition_ws/src/agile_flight/envtest/python/saved/PPO_2  &
   COMP_PID="$!"
 
   cd -
 
-  sleep 0.5
+  sleep 2.0
   rostopic pub /kingfisher/start_navigation std_msgs/Empty "{}" --once
 
   # Wait until the evaluation script has finished

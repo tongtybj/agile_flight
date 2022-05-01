@@ -29,12 +29,15 @@ def rl_example(state, obstacles, rl_policy=None):
     obs_vec = np.array(obs_vec)
 
     # Convert state to vector observation
-    goal_vel = np.array([3.0, 0.0, 0.0]) 
+    goal_vel = np.array([5.0, 0.0, 0.0])
+
+    boundary_vec = np.array([-9.9, 9.9, 0.1, 9.9])
+    pos_yz_vec = np.array([state.pos[1], state.pos[2]])
 
     att_aray = np.array([state.att[1], state.att[2], state.att[3], state.att[0]])
     rotation_matrix = R.from_quat(att_aray).as_matrix().reshape((9,), order="F")
     obs = np.concatenate([
-        goal_vel, rotation_matrix, state.vel, obs_vec], axis=0).astype(np.float64)
+        goal_vel, boundary_vec, rotation_matrix, state.vel, pos_yz_vec, obs_vec], axis=0).astype(np.float64)
 
     obs = obs.reshape(-1, obs.shape[0])
     norm_obs = normalize_obs(obs, obs_mean, obs_var)
@@ -46,12 +49,13 @@ def rl_example(state, obstacles, rl_policy=None):
     command = AgileCommand(command_mode)
     command.t = state.t
     command.collective_thrust = action[0] 
-    command.bodyrates = action[1:4] 
+    command.bodyrates = action[1:4]
     return command
 
 def load_rl_policy(policy_path):
-    policy_dir = policy_path  + "/Policy/iter_00500.pth" 
-    rms_dir = policy_path + "/RMS/iter_00500.npz" 
+    print("============ policy_path: ", policy_path)
+    policy_dir = policy_path  + "/Policy/iter_00250.pth" 
+    rms_dir = policy_path + "/RMS/iter_00250.npz" 
     cfg_dir =  policy_path + "/config.yaml"
 
     # action 
