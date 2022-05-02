@@ -36,6 +36,7 @@ def parser():
     parser.add_argument("--move_coeff", type=float, help="move_coeff of rewards")
     parser.add_argument("--collision_coeff", type=float, help="collision_coeff of rewards")
     parser.add_argument("--collision_exp_coeff", type=float, help="collision_exp_coeff of rewards")
+    parser.add_argument("--dist_margin", type=float, help="dist_margin for collision of rewards")
     parser.add_argument("--survive_rew", type=float, help="collision_coeff of rewards")
     parser.add_argument("--check", type=bool, default = False, help="check of simulation, not make long csv")
     return parser
@@ -62,6 +63,8 @@ def main():
         cfg["rewards"]["collision_coeff"] = args.collision_coeff
     if args.collision_exp_coeff != None:
         cfg["rewards"]["collision_exp_coeff"] = args.collision_exp_coeff
+    if args.dist_margin != None:
+        cfg["rewards"]["dist_margin"] = args.dist_margin
     if args.survive_rew != None:
         cfg["rewards"]["survive_rew"] = args.survive_rew
     # print(cfg["rewards"]["move_coeff"])
@@ -78,7 +81,7 @@ def main():
     
     # create evaluation environment
     old_envs_level = cfg["environment"]["level"]
-    cfg["environment"]["level"] = ["hard"] #evaluate in the hard environment
+    cfg["environment"]["level"] = ["medium"] #evaluate in the medium environment
     #same level regardless of argument of simulator.
     old_num_envs = cfg["simulation"]["num_envs"]
     cfg["simulation"]["num_envs"] = 1
