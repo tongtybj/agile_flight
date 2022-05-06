@@ -66,6 +66,12 @@ def main():
     )
     cfg["simulation"]["num_envs"] = old_num_envs
 
+    total_timesteps=int(5 * 1e7)
+    if "train" in cfg:
+        if "total_timesteps" in cfg["train"]:
+            total_timesteps = int(cfg["train"]["total_timesteps"])
+            print("total_timesteps: {}".format(total_timesteps))
+
     # save the configuration and other files
     rsg_root = os.path.dirname(os.path.abspath(__file__))
     log_dir = rsg_root + "/saved"
@@ -98,7 +104,7 @@ def main():
         )
 
         #
-        model.learn(total_timesteps=int(5 * 1e7), log_interval=(10, 50))
+        model.learn(total_timesteps=total_timesteps, log_interval=(10, 50))
     else:
         if args.render:
             proc = subprocess.Popen(os.environ["FLIGHTMARE_PATH"] + "/flightrender/RPG_Flightmare.x86_64")
