@@ -116,7 +116,7 @@ def main():
                 ent_coef=0.0,
                 vf_coef=0.5,
                 max_grad_norm=0.5,
-                batch_size=200000,
+                batch_size=25000,
                 clip_range=0.2,
                 use_sde=False,  # don't use (gSDE), doesn't work
                 env_cfg=cfg,
@@ -124,7 +124,7 @@ def main():
                 check = args.check
             )
             # print(model.logger)
-            model.learn(total_timesteps=int(5E7), log_interval=(10, 50))
+            model.learn(total_timesteps=int(20E7), log_interval=(10, 50))
         cfg_dir = model.logger.get_dir()+"/config_new.yaml"
         with open(cfg_dir, "w") as outfile:
             dump({
