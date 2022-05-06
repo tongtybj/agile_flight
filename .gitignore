@@ -5,6 +5,12 @@ envtest/ros/summary.yaml
 *.pyc
 *__pycache__
 
+# check_file
+Reading_CSV/*
+
+# depth file
+envtest/depth/
+
 # Compile Commands
 */compile_commands.json
 */.clangd
