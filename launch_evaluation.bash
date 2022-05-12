@@ -40,7 +40,7 @@ for i in $(eval echo {1..$N}); do
   python3 evaluation_node.py &
   PY_PID="$!"
 
-  python3 run_competition.py &
+  python3 run_competition.py & #--ppo_path $FLIGHTMARE_PATH/../envtest/python/saved/PPO_0 &
   COMP_PID="$!"
 
   cd -
