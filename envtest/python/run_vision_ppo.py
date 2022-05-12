@@ -80,15 +80,15 @@ def main():
         cfg["unity"]["render"] = "yes"
     
     # create evaluation environment
-    old_envs_level = cfg["environment"]["level"]
-    cfg["environment"]["level"] = ["medium"] #evaluate in the medium environment
+    # old_envs_level = cfg["environment"]["level"]
+    # cfg["environment"]["level"] = ["medium"] #evaluate in the medium environment
     #same level regardless of argument of simulator.
     old_num_envs = cfg["simulation"]["num_envs"]
     cfg["simulation"]["num_envs"] = 1
     eval_env = wrapper.FlightEnvVec(
         VisionEnv_v1(dump(cfg, Dumper=RoundTripDumper), False)
     )
-    cfg["environment"]["level"] = old_envs_level
+    # cfg["environment"]["level"] = old_envs_level
     cfg["simulation"]["num_envs"] = old_num_envs
 
     # save the configuration and other files
