@@ -10,7 +10,7 @@ project_path=$PWD
 echo $project_path
 
 echo "Making sure submodules are initialized and up-to-date"
-git submodule update --init --recursive
+# git submodule update --init --recursive
 
 echo "Using apt to install dependencies..."
 echo "Will ask for sudo permissions:"
