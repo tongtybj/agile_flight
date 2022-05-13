@@ -60,6 +60,7 @@ class AgilePilotNode:
         self.state = AgileQuadState(state_data)
 
     def obstacle_callback(self, obs_data):
+        past = rospy.get_rostime()
         if self.vision_based:
             return
         if self.state is None:
@@ -67,8 +68,22 @@ class AgilePilotNode:
         rl_policy = None
         if self.ppo_path is not None:
             rl_policy = load_rl_policy(self.ppo_path)
+        
+        load_time = rospy.get_rostime() - past
+        past = rospy.get_rostime()
+
         command = compute_command_state_based(state=self.state, obstacles=obs_data, rl_policy=rl_policy)
+
+        calc_time = rospy.get_rostime() - past
+        past = rospy.get_rostime()
+        
         self.publish_command(command)
+
+        publish_time = rospy.get_rostime() - past
+        rospy.loginfo("policy load time is %i %i", load_time.secs, load_time.nsecs)
+        rospy.loginfo("policy calc time is %i %i", calc_time.secs, calc_time.nsecs)
+        rospy.loginfo("publish time is %i %i", publish_time.secs, publish_time.nsecs)
+        print('\n')
 
     def publish_command(self, command):
         if command.mode == AgileCommandMode.SRT:
