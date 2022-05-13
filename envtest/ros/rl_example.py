@@ -29,12 +29,16 @@ def rl_example(state, obstacles, rl_policy=None):
     obs_vec = np.array(obs_vec)
 
     # Convert state to vector observation
-    goal_vel = np.array([3.0, 0.0, 0.0]) 
+    goal_vel = np.array([5.0, 0.0, 0.0]) 
+    world_box = np.array([-20, 80, -10, 10, 0.0, 10])
 
     att_aray = np.array([state.att[1], state.att[2], state.att[3], state.att[0]])
     rotation_matrix = R.from_quat(att_aray).as_matrix().reshape((9,), order="F")
     obs = np.concatenate([
-        goal_vel, rotation_matrix, state.vel, obs_vec], axis=0).astype(np.float64)
+        goal_vel, rotation_matrix, state.pos, state.vel, obs_vec, 
+        np.array([world_box[2] - state.pos[1], world_box[3] - state.pos[1], 
+        world_box[4] - state.pos[2] , world_box[5] - state.pos[2]]),
+  state.omega], axis=0).astype(np.float64)
 
     obs = obs.reshape(-1, obs.shape[0])
     norm_obs = normalize_obs(obs, obs_mean, obs_var)
