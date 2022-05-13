@@ -17,7 +17,7 @@ fi
 # Launch the simulator, unless it is already running
 if [ -z $(pgrep visionsim_node) ]
 then
-  roslaunch envsim visionenv_sim.launch render:=True &
+  roslaunch envsim visionenv_sim.launch render:=true gui:=false &
   ROS_PID="$!"
   echo $ROS_PID
   sleep 10
@@ -44,7 +44,7 @@ do
   python3 evaluation_node.py &
   PY_PID="$!"
 
-  python3 run_competition.py --ppo_path /root/noetic/icra22_competition_ws/src/agile_flight/envtest/python/saved/PPO_2  &
+  python3 run_competition.py --ppo_path /root/noetic/icra22_competition_ws/src/agile_flight/envtest/python/saved/PPO_12  &
   COMP_PID="$!"
 
   cd -
