@@ -8,3 +8,5 @@ int64 num
 
 # Obstacle array
 envsim_msgs/Obstacle[] obstacles
+
+float64[] boxel

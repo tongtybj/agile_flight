@@ -20,13 +20,13 @@ def normalize_obs(obs, obs_mean, obs_var):
 def rl_example(state, obstacles, rl_policy=None):
     policy, obs_mean, obs_var, act_mean, act_std = rl_policy
     # Convert obstacles to vector observation
-    obs_vec = []
-    for obstacle in obstacles.obstacles:
-        obs_vec.append(obstacle.position.x)
-        obs_vec.append(obstacle.position.y)
-        obs_vec.append(obstacle.position.z)
-        obs_vec.append(obstacle.scale)
-    obs_vec = np.array(obs_vec)
+    # obs_vec = []
+    # for obstacle in obstacles.obstacles:
+    #     obs_vec.append(obstacle.position.x)
+    #     obs_vec.append(obstacle.position.y)
+    #     obs_vec.append(obstacle.position.z)
+    #     obs_vec.append(obstacle.scale)
+    obs_vec = np.array(obstacles.boxel)
 
     # Convert state to vector observation
     goal_vel = np.array([5.0, 0.0, 0.0]) 
@@ -54,8 +54,8 @@ def rl_example(state, obstacles, rl_policy=None):
     return command
 
 def load_rl_policy(policy_path):
-    policy_dir = policy_path  + "/Policy/iter_00500.pth" 
-    rms_dir = policy_path + "/RMS/iter_00500.npz" 
+    policy_dir = policy_path  + "/Policy/iter_02000.pth" 
+    rms_dir = policy_path + "/RMS/iter_02000.npz" 
     cfg_dir =  policy_path + "/config.yaml"
 
     # action 

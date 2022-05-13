@@ -189,19 +189,27 @@ void VisionSim::publishObstacles(const QuadState &state) {
   obstacle_msg.num = vision_env_ptr_->getNumDetectedObstacles();
 
   flightlib::Vector<> obstacle_state;
+  flightlib::Vector<> eval_obstacle_state;
   const int obstacle_obs_dim = 4;
-  obstacle_state.resize(obstacle_obs_dim * obstacle_msg.num);
-  vision_env_ptr_->getObstacleState(obstacle_state);
+  obstacle_state.resize(flightlib::visionenv::Cuts*flightlib::visionenv::Cuts);
+  eval_obstacle_state.resize(obstacle_obs_dim * obstacle_msg.num);
+  vision_env_ptr_->getObstacleState(obstacle_state,eval_obstacle_state);
 
-  for (int i = 0; i < obstacle_msg.num; i++) {
+  for (size_t i = 0; i < flightlib::visionenv::Cuts*flightlib::visionenv::Cuts; ++i){
+    obstacle_msg.boxel.push_back(obstacle_state[i]);
+  }
+
+  for (int i = 0; i < 1; i++) { //send only one obstacle's information
     envsim_msgs::Obstacle single_obstacle;
-    single_obstacle.position.x = obstacle_state[obstacle_obs_dim * i];
-    single_obstacle.position.y = obstacle_state[obstacle_obs_dim * i + 1];
-    single_obstacle.position.z = obstacle_state[obstacle_obs_dim * i + 2];
-    single_obstacle.scale = obstacle_state[obstacle_obs_dim * i + 3];
+    single_obstacle.position.x = eval_obstacle_state[obstacle_obs_dim * i];
+    single_obstacle.position.y = eval_obstacle_state[obstacle_obs_dim * i + 1];
+    single_obstacle.position.z = eval_obstacle_state[obstacle_obs_dim * i + 2];
+    single_obstacle.scale = eval_obstacle_state[obstacle_obs_dim * i + 3];
 
     obstacle_msg.obstacles.push_back(single_obstacle);
   }
+
+
   obstacle_pub_.publish(obstacle_msg);
 }
 
