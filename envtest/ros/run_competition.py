@@ -21,7 +21,10 @@ class AgilePilotNode:
         rospy.init_node('agile_pilot_node', anonymous=False)
 
         self.vision_based = vision_based
-        self.ppo_path = ppo_path 
+        self.ppo_path = ppo_path
+        # self.rl_policy = None
+        # if self.ppo_path is not None:
+        #     self.rl_policy = load_rl_policy(self.ppo_path)
         self.publish_commands = False
         self.cv_bridge = CvBridge()
         self.state = None
@@ -60,11 +63,12 @@ class AgilePilotNode:
         self.state = AgileQuadState(state_data)
 
     def obstacle_callback(self, obs_data):
-        past = rospy.get_rostime()
         if self.vision_based:
             return
         if self.state is None:
+            rospy.loginfo("No state")
             return
+        past = rospy.get_rostime()
         rl_policy = None
         if self.ppo_path is not None:
             rl_policy = load_rl_policy(self.ppo_path)
