@@ -45,7 +45,7 @@ for i in $(eval echo {1..$N}); do
 
   cd -
 
-  sleep 0.5
+  sleep 2.0
   rostopic pub /kingfisher/start_navigation std_msgs/Empty "{}" --once
 
   # Wait until the evaluation script has finished
