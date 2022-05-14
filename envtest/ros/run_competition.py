@@ -24,7 +24,7 @@ class AgilePilotNode:
         self.ppo_path = ppo_path
         self.rl_policy = None
         if self.ppo_path is not None:
-            self.rl_policy = load_rl_policy(self.ppo_path)
+            self.rl_policy = load_rl_policy(ppo_path)
         self.publish_commands = False
         self.cv_bridge = CvBridge()
         self.state = None
