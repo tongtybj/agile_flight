@@ -75,7 +75,7 @@ class AgilePilotNode:
         load_time = rospy.get_rostime() - past
         past = rospy.get_rostime()
 
-        command = compute_command_state_based(state=self.state, obstacles=obs_data, rl_policy=rl_policy)
+        command = compute_command_state_based(state=self.state, obstacles=obs_data, rl_policy=self.rl_policy)
 
         calc_time = rospy.get_rostime() - past
         past = rospy.get_rostime()
