@@ -47,7 +47,6 @@ def compute_command_state_based(state, obstacles, rl_policy=None):
     # !!! Begin of user code !!!
     # TODO: populate the command message
     ################################################
-    print("Computing command based on obstacle information!")
     # print(state)
     # print("Obstacles: ", obstacles)
 

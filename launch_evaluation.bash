@@ -44,7 +44,7 @@ do
   python3 evaluation_node.py &
   PY_PID="$!"
 
-  python3 run_competition.py &
+  python3 run_competition.py --ppo_path `rospack find envsim`/../trained_model &
   COMP_PID="$!"
 
   cd -
