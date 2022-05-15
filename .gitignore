@@ -39,6 +39,7 @@ GPATH
 .vscode/*
 
 saved
-evaluation/*
+evaluation_result/*
+evaluation_result_old/*
 
 DDC_JSK_result.png
