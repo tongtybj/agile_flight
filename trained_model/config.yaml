@@ -1,6 +1,6 @@
 environment:
   level:
-  - hard
+  - medium
   env_folder: 0 # beginning of env
   world_box: [-20, 80, -10, 10, 0.0, 10]
   goal_vel: [5.0, 0.0, 0.0]
@@ -15,7 +15,7 @@ environment:
 rewards:
   move_coeff: 1.0
   vel_coeff: 0
-  collision_coeff: -0.02
+  collision_coeff: -0.05
   collision_exp_coeff: 1.0
   dist_margin: 0.5
   angular_vel_coeff: 0.0
