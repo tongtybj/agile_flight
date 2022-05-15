@@ -83,10 +83,10 @@ class AgilePilotNode:
         self.publish_command(command)
 
         publish_time = rospy.get_rostime() - past
-        rospy.loginfo("policy load time is %i %i", load_time.secs, load_time.nsecs)
-        rospy.loginfo("policy calc time is %i %i", calc_time.secs, calc_time.nsecs)
-        rospy.loginfo("publish time is %i %i", publish_time.secs, publish_time.nsecs)
-        print('\n')
+        # rospy.loginfo("policy load time is %i %i", load_time.secs, load_time.nsecs)
+        # rospy.loginfo("policy calc time is %i %i", calc_time.secs, calc_time.nsecs)
+        # rospy.loginfo("publish time is %i %i", publish_time.secs, publish_time.nsecs)
+        # print('\n')
 
     def publish_command(self, command):
         if command.mode == AgileCommandMode.SRT:

@@ -54,8 +54,9 @@ def rl_example(state, obstacles, rl_policy=None):
     return command
 
 def load_rl_policy(policy_path):
-    policy_dir = policy_path  + "/Policy/iter_02000.pth" 
-    rms_dir = policy_path + "/RMS/iter_02000.npz" 
+    print("============ policy_path: ", policy_path)
+    policy_dir = policy_path  + "/policy.pth"
+    rms_dir = policy_path + "/rms.npz"
     cfg_dir =  policy_path + "/config.yaml"
 
     # action 
