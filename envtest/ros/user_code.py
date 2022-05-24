@@ -3,10 +3,10 @@
 
 from pickle import NONE
 from utils import AgileCommandMode, AgileCommand
-from rl_example import rl_example
+from rl_example import rl_example, rl_example_vision
 
 
-def compute_command_vision_based(state, img):
+def compute_command_vision_based(state, img, rl_policy=None):
     ################################################
     # !!! Begin of user code !!!
     # TODO: populate the command message
@@ -35,10 +35,18 @@ def compute_command_vision_based(state, img):
     command.velocity = [1.0, 0.0, 0.0]
     command.yawrate = 0.0
 
+    if rl_policy is not None:
+        # command = rl_example_vision(state, img, rl_policy)
+        print(img.data)
+        print(type(image.data))
+        print(len(image.data))
+
+
     ################################################
     # !!! End of user code !!!
     ################################################
-
+    print(command)
+    
     return command
 
 
