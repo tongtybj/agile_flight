@@ -98,6 +98,9 @@ def img_to_obs(img): #http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Ima
     # print(img[0].shape)
     # print(img[0,0])
 
+    print("max_depth is "+ str(np.amax(img)))
+    print("min_depth is "+ str(np.amin(img)))
+
     env_cuts = 8
     boundary = int(env_cuts/2)
     obstacle_obs = np.zeros(env_cuts*env_cuts)
@@ -105,15 +108,15 @@ def img_to_obs(img): #http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Ima
         for phi in range(-boundary, boundary):
             tcell = (theta+0.5)*(np.pi/env_cuts)/2
             pcell = (phi+0.5)*(np.pi/env_cuts)/2
-            print("tcell is "+str(tcell))
-            print("pcell is "+str(pcell))
+            # print("tcell is "+str(tcell))
+            # print("pcell is "+str(pcell))
             obstacle_obs[(theta+boundary)*env_cuts+(phi+boundary)] = getClosestDistance(img, tcell, pcell)
-            print(obstacle_obs[(theta+boundary)*env_cuts+(phi+boundary)])
+            # print(obstacle_obs[(theta+boundary)*env_cuts+(phi+boundary)])
     return obstacle_obs
 
 def getClosestDistance(img, tcell,pcell):
     Cell = getCartesianFromAng(tcell, pcell)
-    print(Cell)
+    # print(Cell)
     K = getCameraIntrinsics()
     Camera_Cell = np.array([-Cell[1],-Cell[2],Cell[0]])
     Camera_c_point = K @ Camera_Cell
@@ -121,7 +124,7 @@ def getClosestDistance(img, tcell,pcell):
         int(Camera_c_point[0]/Camera_c_point[2]),
         int(Camera_c_point[1]/Camera_c_point[2])
         ])
-    print(Camera_point)
+    # print(Camera_point)
 
     if 0< Camera_point[0] < 320 and 0 < Camera_point[1] < 240: #if can observe
         return img[Camera_point[1], Camera_point[0]]
