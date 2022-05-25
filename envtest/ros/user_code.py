@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 from pickle import NONE
 from utils import AgileCommandMode, AgileCommand
-from rl_example import rl_example, rl_example_vision
+from rl_example import rl_example
 
 
 def compute_command_vision_based(state, img, rl_policy=None):
