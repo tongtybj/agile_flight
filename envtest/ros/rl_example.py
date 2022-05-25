@@ -26,7 +26,7 @@ def rl_example(state, obstacles, rl_policy=None):
     #     obs_vec.append(obstacle.position.y)
     #     obs_vec.append(obstacle.position.z)
     #     obs_vec.append(obstacle.scale)
-    obs_vec = np.array(obstacles.boxel)
+    obs_vec = np.array(obstacles)
 
     # Convert state to vector observation
     goal_vel = np.array([5.0, 0.0, 0.0]) 
@@ -54,8 +54,8 @@ def rl_example(state, obstacles, rl_policy=None):
     return command
 
 def load_rl_policy(policy_path):
-    policy_dir = policy_path  + "/Policy/iter_02000.pth" 
-    rms_dir = policy_path + "/RMS/iter_02000.npz" 
+    policy_dir = policy_path  + "/Policy/iter_03350.pth" 
+    rms_dir = policy_path + "/RMS/iter_03350.npz" 
     cfg_dir =  policy_path + "/config.yaml"
 
     # action 

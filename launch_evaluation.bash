@@ -23,7 +23,7 @@ else
 fi
 
 SUMMARY_FILE="evaluation.yaml"
-"" >$SUMMARY_FILE
+echo "" > $SUMMARY_FILE
 
 # Perform N evaluation runs
 for i in $(eval echo {1..$N}); do
@@ -40,7 +40,7 @@ for i in $(eval echo {1..$N}); do
   python3 evaluation_node.py &
   PY_PID="$!"
 
-  python3 run_competition.py --ppo_path $FLIGHTMARE_PATH/../envtest/python/saved/PPO_452 &
+  python3 run_competition.py --ppo_path $FLIGHTMARE_PATH/../envtest/python/saved/PPO_18 --vision_based &
   COMP_PID="$!"
 
   cd -

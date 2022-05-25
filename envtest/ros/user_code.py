@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 
 
+import numpy as np
+import cv2
 from pickle import NONE
 from utils import AgileCommandMode, AgileCommand
 from rl_example import rl_example
 
 
-def compute_command_vision_based(state, img):
+def compute_command_vision_based(state, img, rl_policy=None):
     ################################################
     # !!! Begin of user code !!!
     # TODO: populate the command message
@@ -34,6 +36,15 @@ def compute_command_vision_based(state, img):
     command.t = state.t
     command.velocity = [1.0, 0.0, 0.0]
     command.yawrate = 0.0
+
+    resized_img = cv2.resize(img, (8, 8), interpolation=cv2.INTER_NEAREST)[::-1, ::-1].T
+    print("{}, {}, {}".format(np.min(resized_img), np.max(resized_img), img.shape))
+    obstacles = np.minimum(resized_img*10.0, 1.0)
+    # print(obstacles)
+    obstacles = obstacles.flatten()
+
+    if rl_policy is not None:
+        command = rl_example(state, obstacles, rl_policy)
 
     ################################################
     # !!! End of user code !!!
@@ -73,7 +84,7 @@ def compute_command_state_based(state, obstacles, rl_policy=None):
 
     # If you want to test your RL policy
     if rl_policy is not None:
-        command = rl_example(state, obstacles, rl_policy)
+        command = rl_example(state, obstacles.boxel, rl_policy)
 
     ################################################
     # !!! End of user code !!!
