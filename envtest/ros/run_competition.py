@@ -23,8 +23,6 @@ class AgilePilotNode:
         self.vision_based = vision_based
         self.ppo_path = ppo_path
         self.rl_policy = None
-        # if self.ppo_path is not None:
-        #     self.rl_policy = load_rl_policy(ppo_path)
         self.publish_commands = False
         self.cv_bridge = CvBridge()
         self.state = None
@@ -55,10 +53,13 @@ class AgilePilotNode:
             return
         if self.state is None:
             return
-        cv_image = self.cv_bridge.imgmsg_to_cv2(img_data, desired_encoding='passthrough')
+
         if self.rl_policy is None:
             self.rl_policy = load_rl_policy(self.ppo_path)
-        command = compute_command_vision_based(self.state, cv_image, rl_policy=self.rl_policy) # to input rl_policy
+        # print(self.rl_policy)
+
+        cv_image = self.cv_bridge.imgmsg_to_cv2(img_data, '32FC1')
+        command = compute_command_vision_based(self.state, cv_image, rl_policy=self.rl_policy)
         self.publish_command(command)
 
     def state_callback(self, state_data):
@@ -71,6 +72,7 @@ class AgilePilotNode:
             rospy.loginfo("No state")
             return
         past = rospy.get_rostime()
+        
         if self.rl_policy is None:
             self.rl_policy = load_rl_policy(self.ppo_path)
         
@@ -81,7 +83,7 @@ class AgilePilotNode:
 
         calc_time = rospy.get_rostime() - past
         past = rospy.get_rostime()
-        
+
         self.publish_command(command)
 
         publish_time = rospy.get_rostime() - past
