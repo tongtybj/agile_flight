@@ -36,12 +36,11 @@ def compute_command_vision_based(state, img, rl_policy=None):
     command.yawrate = 0.0
 
     if rl_policy is not None:
-        rl_example_vision(state, img, rl_policy)
-        # command = 
+        command = rl_example_vision(state, img, rl_policy)
     ################################################
     # !!! End of user code !!!
     ################################################
-    print(command)
+    # print(command)
     
     return command
 

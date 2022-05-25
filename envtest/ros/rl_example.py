@@ -65,30 +65,30 @@ def rl_example_vision(state, img, rl_policy=None):
     #     obs_vec.append(obstacle.scale)
     obs_vec = img_to_obs(img)
 
-    # Convert state to vector observation
-#     goal_vel = np.array([5.0, 0.0, 0.0]) 
-#     world_box = np.array([-20, 80, -10, 10, 0.0, 10])
+#     Convert state to vector observation
+    goal_vel = np.array([5.0, 0.0, 0.0]) 
+    world_box = np.array([-20, 80, -10, 10, 0.0, 10])
 
-#     att_aray = np.array([state.att[1], state.att[2], state.att[3], state.att[0]])
-#     rotation_matrix = R.from_quat(att_aray).as_matrix().reshape((9,), order="F")
-#     obs = np.concatenate([
-#         goal_vel, rotation_matrix, state.pos, state.vel, obs_vec, 
-#         np.array([world_box[2] - state.pos[1], world_box[3] - state.pos[1], 
-#         world_box[4] - state.pos[2] , world_box[5] - state.pos[2]]),
-#   state.omega], axis=0).astype(np.float64)
+    att_aray = np.array([state.att[1], state.att[2], state.att[3], state.att[0]])
+    rotation_matrix = R.from_quat(att_aray).as_matrix().reshape((9,), order="F")
+    obs = np.concatenate([
+        goal_vel, rotation_matrix, state.pos, state.vel, obs_vec, 
+        np.array([world_box[2] - state.pos[1], world_box[3] - state.pos[1], 
+        world_box[4] - state.pos[2] , world_box[5] - state.pos[2]]),
+  state.omega], axis=0).astype(np.float64)
 
-#     obs = obs.reshape(-1, obs.shape[0])
-#     norm_obs = normalize_obs(obs, obs_mean, obs_var)
-#     #  compute action
-#     action, _ = policy.predict(norm_obs, deterministic=True)
-#     action = (action * act_std + act_mean)[0, :]
+    obs = obs.reshape(-1, obs.shape[0])
+    norm_obs = normalize_obs(obs, obs_mean, obs_var)
+    #  compute action
+    action, _ = policy.predict(norm_obs, deterministic=True)
+    action = (action * act_std + act_mean)[0, :]
 
-#     command_mode = 1
-#     command = AgileCommand(command_mode)
-#     command.t = state.t
-#     command.collective_thrust = action[0] 
-#     command.bodyrates = action[1:4] 
-#     return command
+    command_mode = 1
+    command = AgileCommand(command_mode)
+    command.t = state.t
+    command.collective_thrust = action[0] 
+    command.bodyrates = action[1:4] 
+    return command
 
 def img_to_obs(img): #http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html #change hyperparameters!
     # print("type is " + str(type(img)))
@@ -98,8 +98,8 @@ def img_to_obs(img): #http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Ima
     # print(img[0].shape)
     # print(img[0,0])
 
-    print("max_depth is "+ str(np.amax(img)))
-    print("min_depth is "+ str(np.amin(img)))
+    # print("max_depth is "+ str(np.amax(img)))
+    # print("min_depth is "+ str(np.amin(img)))
 
     env_cuts = 8
     boundary = int(env_cuts/2)
@@ -110,7 +110,7 @@ def img_to_obs(img): #http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Ima
             pcell = (phi+0.5)*(np.pi/env_cuts)/2
             # print("tcell is "+str(tcell))
             # print("pcell is "+str(pcell))
-            obstacle_obs[(theta+boundary)*env_cuts+(phi+boundary)] = getClosestDistance(img, tcell, pcell)
+            obstacle_obs[(theta+boundary)*env_cuts+(phi+boundary)] = min(getClosestDistance(img, tcell, pcell)*20,1)
             # print(obstacle_obs[(theta+boundary)*env_cuts+(phi+boundary)])
     return obstacle_obs
 
@@ -126,10 +126,15 @@ def getClosestDistance(img, tcell,pcell):
         ])
     # print(Camera_point)
 
-    if 0< Camera_point[0] < 320 and 0 < Camera_point[1] < 240: #if can observe
-        return img[Camera_point[1], Camera_point[0]]
-    else:
-        return 0.5
+    if Camera_point[0] < 0:
+        Camera_point[0] = 0
+    if 320 -1 < Camera_point[0]:
+        Camera_point[0] = 320 -1
+    if Camera_point[1] < 0:
+        Camera_point[1] = 0
+    if 240 -1 < Camera_point[1]:
+        Camera_point[1] = 240 -1
+    return img[Camera_point[1], Camera_point[0]]
 
 
 def getCartesianFromAng(tcell, pcell):
@@ -142,7 +147,7 @@ def getCameraIntrinsics():
     fov_ = 150.0
     K = np.array([
         [(height_ / 2) / (np.tanh(np.pi * fov_ / 180)), 0, width_/2],
-        [0, (height_ / 2) / (np.tanh(np.pi * fov_ / 180)), height_ / 2],
+        [0, (height_ / 2) / (np.tanh(np.pi * fov_ / 180)), height_/2],
         [0,0,1]])
     return K
     
