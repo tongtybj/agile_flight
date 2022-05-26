@@ -38,8 +38,14 @@ def compute_command_vision_based(state, img, rl_policy=None):
     command.yawrate = 0.0
 
     resized_img = cv2.resize(img, (8, 8), interpolation=cv2.INTER_NEAREST)[::-1, ::-1].T
-    print("{}, {}, {}".format(np.min(resized_img), np.max(resized_img), img.shape))
-    obstacles = np.minimum(resized_img*10.0, 1.0)
+    # print("{}, {}, {}".format(np.min(resized_img), np.max(resized_img), img.shape))
+    phi = 45*7/8
+    phi_np = np.linspace(-phi*np.pi/180, phi*np.pi/180, 8)
+    phi_np = np.cos(phi_np)
+    phi_np = np.tile(phi_np,(8,1))
+    theta_np = np.copy(phi_np).T 
+
+    obstacles = np.minimum((resized_img/phi_np/theta_np)*10.0, 1.0)
     # print(obstacles)
     obstacles = obstacles.flatten()
 
