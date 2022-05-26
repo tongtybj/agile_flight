@@ -58,7 +58,7 @@ class AgilePilotNode:
             self.rl_policy = load_rl_policy(self.ppo_path)
         # print(self.rl_policy)
 
-        cv_image = self.cv_bridge.imgmsg_to_cv2(img_data, '32FC1')
+        cv_image = self.cv_bridge.imgmsg_to_cv2(img_data, desired_encoding='passthrough')
         command = compute_command_vision_based(self.state, cv_image, rl_policy=self.rl_policy)
         self.publish_command(command)
 
