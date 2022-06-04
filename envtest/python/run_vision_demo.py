@@ -46,9 +46,16 @@ def main():
     # define the number of environment for parallelization simulation
     cfg["simulation"]["num_envs"] = 1 
 
+    # print("dumper")
+    # print(dump(cfg, Dumper=RoundTripDumper))
+    # print("dumper finish")
+
+
     # create training environment
     env = VisionEnv_v1(dump(cfg, Dumper=RoundTripDumper), False)
+    # print("env set is finished")
     env = wrapper.FlightEnvVec(env)
+    # print("env wrapper is finished")
 
     ep_length = 100
 
@@ -56,11 +63,15 @@ def main():
     act_dim = env.act_dim
     num_env = env.num_envs
 
+    print("input envs valiable")
+
     env.reset(random=True)
+    print("reset env")
 
     # connect unity
     if args.render:
       env.connectUnity()
+    # print("connect unity")
 
 
     for frame_id in range(ep_length):
