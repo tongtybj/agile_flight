@@ -61,6 +61,7 @@ def main():
 
     obs_dim = env.obs_dim
     act_dim = env.act_dim
+    print("act_dim is " + str(act_dim))
     num_env = env.num_envs
 
     print("input envs valiable")
@@ -78,6 +79,9 @@ def main():
       print("Simuation step: {0}".format(frame_id))
       # generate dummmy action [-1, 1]
       dummy_actions = np.random.rand(num_env, act_dim) * 2 - np.ones(shape=(num_env, act_dim))
+    #   print(dummy_actions)
+      dummy_actions = np.array([[0,0,0,0.9,0,0,0]])
+      print(dummy_actions)
 
       # A standard OpenAI gym style interface for reinforcement learning.    
       obs, rew, done, info = env.step(dummy_actions)
