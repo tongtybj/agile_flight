@@ -73,13 +73,13 @@ class AgilePilotNode:
             return
         past = rospy.get_rostime()
         
-        if self.rl_policy is None:
-            self.rl_policy = load_rl_policy(self.ppo_path)
+        # if self.rl_policy is None:
+        #     self.rl_policy = load_rl_policy(self.ppo_path)
         
         load_time = rospy.get_rostime() - past
         past = rospy.get_rostime()
 
-        command = compute_command_state_based(state=self.state, obstacles=obs_data, rl_policy=self.rl_policy)
+        command = compute_command_state_based(state=self.state, obstacles=obs_data) #, rl_policy=self.rl_policy
 
         calc_time = rospy.get_rostime() - past
         past = rospy.get_rostime()

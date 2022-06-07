@@ -40,7 +40,7 @@ for i in $(eval echo {1..$N}); do
   python3 evaluation_node.py &
   PY_PID="$!"
 
-  python3 run_competition.py --ppo_path $(rospack find envsim)/../trained_model --vision_based &
+  python3 run_competition.py & #--ppo_path $(rospack find envsim)/../trained_model --vision_based &
   COMP_PID="$!"
 
   cd -

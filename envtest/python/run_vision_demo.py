@@ -78,9 +78,9 @@ def main():
     for frame_id in range(ep_length):
       print("Simuation step: {0}".format(frame_id))
       # generate dummmy action [-1, 1]
-      dummy_actions = np.random.rand(num_env, act_dim) * 2 - np.ones(shape=(num_env, act_dim))
+    #   dummy_actions = np.random.rand(num_env, act_dim) * 2 - np.ones(shape=(num_env, act_dim))
     #   print(dummy_actions)
-      dummy_actions = np.array([[0,0,0.5,0,0,0,0]])
+      dummy_actions = np.array([[0,0,0.5,0.5,0.5,0.5,0.5]])
       print(dummy_actions)
 
       # A standard OpenAI gym style interface for reinforcement learning.    
@@ -88,6 +88,7 @@ def main():
  
       #
       receive_frame_id = env.render(frame_id = frame_id)
+      print('')
       print("sending frame id: ", frame_id, "received frame id: ", receive_frame_id)
 
       # ====== Retrive RGB Image From the simulator=========
